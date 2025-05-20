@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя страница</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="block_up">
+            <div class="header-user">
+                <img id="sidebarAvatar"
+                     src="{{ user.avatar_url | default('/static/default-avatar.png') }}?v={{ '%08x' % range(1,999999999)|random }}"
+                     class="avatar"
+                     alt="Аватар">
+                <span class="nickname">{{ user.username }}</span>
+            </div>
+            <div class="tab-header-container">
+                <div class="tab-header active" data-tab="home" onclick="showTab('home')"><span>Главная</span></div>
+                <div class="tab-header" data-tab="profile" onclick="showTab('profile')"><span>Профиль</span></div>
+                <div class="tab-header" data-tab="myBooks" onclick="showTab('myBooks')"><span>Мои книги</span></div>
+                {% if session['user_role'] == 2 %}
+                <div class="tab-header" data-tab="librarian" onclick="showTab('librarian')"><span>Библиотекарь</span></div>
+                {% endif %}
+                {% if session['user_role'] == 3 %}
+                <div class="tab-header" data-tab="admin" onclick="showTab('admin')"><span>Админ</span></div>
+                {% endif %}
+            </div>
+            </div>
+            <div class="sidebar-content">
+                <h4>Продолжить читать</h4>
+                {% if last_reading_book %}
+                <div class="book">
+                    <div class="book-cover">
+                        <img src="{{ last_reading_book.cover_image_url }}" alt="Обложка книги">
+                    </div>
+                    <div class="block_down">
+                    <div class="book-info">
+                        <div class="title">{{ last_reading_book.title }}</div>
+                        <div class="author">{{ last_reading_book.author_name }}</div>
+                        <div class="rating">
+                            {% for i in range(last_reading_book.rating|int) %}
+                            <span class="star">★</span>
+                            {% endfor %}
+                            <span class="numeric-rating">
+                                {% if last_reading_book.rating is not none %}
+                                    {{ "%.1f"|format(last_reading_book.rating) }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="handleReadButtonClick('{{ last_reading_book.isbn }}', '{{ last_reading_book.file_path }}')" class="read-button">
+                        Читать
+                    </button>
+                    </div>
+                </div>
+                {% else %}
+                <p>Вы еще не начали ни одной книги.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="content">
+            <!-- Вкладка Главная -->
+            <div id="home" class="tab">
+                <div class="genre-container">
+                    {% for genre in genres %}
+                    <div class="genre" onclick="showGenre('{{ genre }}')">{{ genre }}</div>
+                    {% endfor %}
+                    <button id="cancelGener" class="hidden" title="Очистить фильтры" onclick="clearGenre()">✕</button>
+                </div>
+                <div class="book-shelf" id="genre-results-shelf" style="display:none">
+                    <h3></h3>
+                    <div class="shelf" id="genre-results-container"></div>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" placeholder="Поиск книг..." id="searchInput">
+                    <button onclick="searchBooks()">🔍</button>
+                    <button id="cancelSearch" class="hidden" title="Очистить поиск">✕</button>
+                </div>
+                <!-- Результаты поиска -->
+                <div class="book-shelf" id="search-results-shelf" style="display:none">
+                    <h3>🔍 Результаты поиска</h3>
+                    <div class="shelf" id="search-results-container"></div>
+                </div>
+
+                <!-- Популярные книги -->
+                <div class="book-shelf">
+                    <h3>Популярное</h3>
+                    <div class="shelf">
+                        {% for book in popular_books %}
+                        <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                            <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                            <div class="book-info">
+                                <div class="title">{{ book.title }}</div>
+                                <div class="author">{{ book.author_name }}</div>
+                                <div class="rating">
+                                    {% for i in range(book.rating|int) %}
+                                    <span class="star">★</span>
+                                    {% endfor %}
+                                    <span class="numeric-rating">
+                                        {% if book.rating is not none %}
+                                            {{ "%.1f"|format(book.rating) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Новинки -->
+                <div class="book-shelf">
+                    <h3>Новинки</h3>
+                    <div class="shelf">
+                        {% for book in new_books %}
+                        <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                            <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                            <div class="book-info">
+                                <div class="title">{{ book.title }}</div>
+                                <div class="author">{{ book.author_name }}</div>
+                                <div class="rating">
+                                    {% for i in range(book.rating|int) %}
+                                    <span class="star">★</span>
+                                    {% endfor %}
+                                    <span class="numeric-rating">
+                                        {% if book.rating is not none %}
+                                            {{ "%.1f"|format(book.rating) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Рекомендуемые книги -->
+                <div class="book-shelf">
+                    <h3>Рекомендуем</h3>
+                    <div class="shelf">
+                        {% for book in recommend_shelf %}
+                        <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                            <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                            <div class="book-info">
+                                <div class="title">{{ book.title }}</div>
+                                <div class="author">{{ book.author_name }}</div>
+                                <div class="rating">
+                                    {% for i in range(book.rating|int) %}
+                                    <span class="star">★</span>
+                                    {% endfor %}
+                                    <span class="numeric-rating">
+                                        {% if book.rating is not none %}
+                                            {{ "%.1f"|format(book.rating) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Дополнительные полки -->
+                {% if recommend_shelf|length == 50 %}
+                    {% for shelf in additional_shelves %}
+                    <div class="book-shelf">
+                        <h3>Еще книги</h3>
+                        <div class="shelf">
+                            {% for book in shelf %}
+                            <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                                <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                                <div class="book-info">
+                                    <div class="title">{{ book.title }}</div>
+                                    <div class="author">{{ book.author_name }}</div>
+                                    <div class="rating">
+                                        {% for i in range(book.rating|int) %}
+                                        <span class="star">★</span>
+                                        {% endfor %}
+                                        <span class="numeric-rating">
+                                            {% if book.rating is not none %}
+                                                {{ "%.1f"|format(book.rating) }}
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Вкладка Профиль -->
+            <div id="profile" class="tab">
+                <div class="profile-header">
+                    <h3>Ваш профиль</h3>
+                    <button id="edit-btn" onclick="toggleEdit()">Редактировать</button>
+                </div>
+
+                <div class="profile-content">
+                    <form id="profile-form" onsubmit="return false;">
+                        <div class="avatar-section">
+                            <input type="file" id="avatarInput" accept="image/*" hidden onchange="handleAvatarUpload(event)">
+                            <img id="previewAvatar" src="{{ user.avatar_url | default('/static/default-avatar.png') }}" class="avatar" alt="Аватар" onclick="document.getElementById('avatarInput').click();">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Никнейм:</label>
+                            <input type="text" name="username" value="{{ user.username }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Дата рождения:</label>
+                            <input type="date" name="birth_date"
+                                   value="{{ user.birth_date }}"
+                                   readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Допустимый рейтинг:</label>
+                            <div class="rating-badge" data-rating="{{ allowed_rating }}"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn" hidden>Сохранить</button>
+                            <button type="button" class="logout-btn" onclick="logout()">Выйти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Вкладка Мои книги -->
+            <div id="myBooks" class="tab">
+                <h3>Мои книги</h3>
+                <div class="book-shelf">
+                    <h4>📖 Начатые книги</h4>
+                    {% if reading_history_books %}
+                        <div class="shelf">
+                            {% for book in reading_history_books %}
+                            <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                                <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                                <div class="book-info">
+                                    <div class="title">{{ book.title }}</div>
+                                    <div class="author">{{ book.author_name }}</div>
+                                    <div class="rating">
+                                        {% for i in range(book.rating|int) %}
+                                        <span class="star">★</span>
+                                        {% endfor %}
+                                        <span class="numeric-rating">
+                                            {% if book.rating is not none %}
+                                                {{ "%.1f"|format(book.rating) }}
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-shelf">
+                            <p>Вы еще не начали читать ни одной книги</p>
+                            <button onclick="showTab('home')">Найти книги</button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="book-shelf">
+                    <h4>❤️ Избранные</h4>
+                    <div class="shelf">
+                        {% for book in favorite_books %}
+                        <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                            <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                            <div class="book-info">
+                                <div class="title">{{ book.title }}</div>
+                                <div class="author">{{ book.author_name }}</div>
+                                <div class="rating">
+                                    {% for i in range(book.rating|int) %}
+                                    <span class="star">★</span>
+                                    {% endfor %}
+                                    <span class="numeric-rating">
+                                        {% if book.rating is not none %}
+                                            {{ "%.1f"|format(book.rating) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                    ❤️
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка Библиотекарь -->
+            {% if session['user_role'] == 2 %}
+            <div id="librarian" class="tab" style="display: none;">
+                <div class="admin-header">
+                    <h3>Панель библиотекаря</h3>
+                    <button id="add-book-btn" onclick="toggleAddBookForm()">Добавить книгу</button>
+                </div>
+                <div id="add-book-form" style="display: none;">
+                    <form id="book-form" onsubmit="submitBook(event)">
+                        <div class="form-group">
+                            <label for="title">Название:</label>
+                            <input type="text" id="title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Автор:</label>
+                            <div class="author-fields">
+                                <input type="text" id="author_last_name" name="author_last_name" placeholder="Фамилия" required>
+                                <input type="text" id="author_first_name" name="author_first_name" placeholder="Имя" required>
+                                <input type="text" id="author_middle_name" name="author_middle_name" placeholder="Отчество">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="genre">Жанр:</label>
+                            <input type="text" id="genre" name="genre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="publication_year">Год публикации:</label>
+                            <input type="number" id="publication_year" name="publication_year"  required>
+                        </div>
+                        <div class="form-group">
+                            <label for="publisher">Издатель:</label>
+                            <input type="text" id="publisher" name="publisher" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age_rating">Возрастной рейтинг:</label>
+                            <input type="text" id="age_rating" name="age_rating" placeholder="Например, 12+" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="total_pages">Количество страниц:</label>
+                            <input type="number" id="total_pages" name="total_pages" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="isbn">ISBN:</label>
+                            <input type="text" id="isbn" name="isbn" pattern="[0-9-]{10,17}" title="ISBN должен содержать 10-17 цифр или дефисов" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Описание:</label>
+                            <textarea id="description" name="description" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="cover_image_url">URL обложки:</label>
+                            <input type="url" id="cover_image_url" name="cover_image_url" placeholder="https://example.com/cover.jpg">
+                        </div>
+                        <div class="form-group">
+                            <label for="file_path">Путь к файлу:</label>
+                            <input type="text" id="file_path" name="file_path" placeholder="Например, uploads/books/book.pdf" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn">Сохранить</button>
+                            <button type="button" class="cancel-btn" onclick="toggleAddBookForm()">Отмена</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Недавно добавленные -->
+                <div class="book-shelf">
+                    <h3>Недавно добавленные</h3>
+                    <div class="shelf">
+                        {% for book in new_books %}
+                        <div class="book-item" onclick="window.location.href='{{ url_for('book_detail', isbn=book.isbn) }}'">
+                            <img src="{{ book.cover_image_url }}" alt="{{ book.title }}">
+                            <div class="book-info">
+                                <div class="title">{{ book.title }}</div>
+                                <div class="author">{{ book.author_name }}</div>
+                                <div class="rating">
+                                    {% for i in range(book.rating|int) %}
+                                    <span class="star">★</span>
+                                    {% endfor %}
+                                    <span class="numeric-rating">
+                                        {% if book.rating is not none %}
+                                            {{ "%.1f"|format(book.rating) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Панель администратора -->
+            {% if session['user_role'] == 3 %}
+            <div id="admin" class="tab" style="display: none;">
+                <div class="admin-header">
+                    <h3>Панель администратора</h3>
+                    <div class="filter-section">
+                        <label for="periodFilter">Период: </label>
+                        <select id="periodFilter" onchange="updateStatistics()">
+                            <option value="12">Последний год</option>
+                            <option value="6">Последние 6 месяцев</option>
+                            <option value="3">Последние 3 месяца</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="statistics-section">
+                    <div class="chart-container">
+                        <div class="chart-wrapper">
+                            <h4>Статистика по возрастам читателей</h4>
+                            <canvas id="ageChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="chart-description" id="ageChartDescription">
+                            <h5>Назначение диаграммы</h5>
+                            <p>Эта диаграмма показывает распределение читателей библиотеки по возрастным группам. Она помогает понять, какая возрастная аудитория наиболее активна, и адаптировать книжный фонд под их интересы.</p>
+                            <h5>Полезность</h5>
+                            <ul>
+                                <li>Определение целевой аудитории для закупки новых книг.</li>
+                                <li>Планирование мероприятий, ориентированных на разные возрастные группы.</li>
+                                <li>Анализ демографических трендов среди пользователей.</li>
+                            </ul>
+                            <button class="download-btn" onclick="openDownloadModal('ageChart', 'age_statistics')">Скачать диаграмму</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="statistics-section">
+                    <div class="chart-container">
+                        <div class="chart-wrapper">
+                            <h4>Самые читаемые книги</h4>
+                            <canvas id="popularBooksChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="chart-description" id="popularBooksChartDescription">
+                            <h5>Назначение диаграммы</h5>
+                            <p>Диаграмма отображает топ-5 самых читаемых книг на основе количества их прочтений. Это позволяет выявить наиболее популярные произведения в библиотеке.</p>
+                            <h5>Полезность</h5>
+                            <ul>
+                                <li>Формирование рекомендаций для читателей.</li>
+                                <li>Оптимизация закупок новых экземпляров популярных книг.</li>
+                                <li>Анализ предпочтений пользователей для обновления каталога.</li>
+                            </ul>
+                            <button class="download-btn" onclick="openDownloadModal('popularBooksChart', 'popular_books')">Скачать диаграмму</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="statistics-section">
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <h4>Активность пользователей по месяцам</h4>
+                        <canvas id="activityChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-description" id="activityChartDescription">
+                        <h5>Назначение диаграммы</h5>
+                        <p>Показывает количество прочтений книг по месяцам за выбранный период, отражая активность пользователей.</p>
+                        <h5>Полезность</h5>
+                        <ul>
+                            <li>Определение пиков и спадов активности для планирования ресурсов.</li>
+                            <li>Организация мероприятий в периоды низкой активности.</li>
+                            <li>Оценка влияния внешних факторов на посещаемость.</li>
+                        </ul>
+                        <button class="download-btn" onclick="openDownloadModal('activityChart', 'activity_statistics')">Скачать диаграмму</button>
+                    </div>
+                </div>
+            </div>
+            <div class="statistics-section">
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <h4>Популярность жанров</h4>
+                        <canvas id="genreChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-description" id="genreChartDescription">
+                        <h5>Назначение диаграммы</h5>
+                        <p>Отображает распределение прочтений книг по жанрам, показывая, какие категории наиболее популярны.</p>
+                        <h5>Полезность</h5>
+                        <ul>
+                            <li>Приоритет закупки книг в востребованных жанрах.</li>
+                            <li>Создание рекомендаций для читателей.</li>
+                            <li>Продвижение менее популярных жанров через акции.</li>
+                        </ul>
+                        <button class="download-btn" onclick="openDownloadModal('genreChart', 'genre_statistics')">Скачать диаграмму</button>
+                    </div>
+                </div>
+            </div>
+            <div class="statistics-section">
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <h4>Новые пользователи по месяцам</h4>
+                        <canvas id="newUsersChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-description" id="newUsersChartDescription">
+                        <h5>Назначение диаграммы</h5>
+                        <p>Показывает количество новых пользователей, начавших читать книги, по месяцам за выбранный период.</p>
+                        <h5>Полезность</h5>
+                        <ul>
+                            <li>Оценка эффективности маркетинговых кампаний.</li>
+                            <li>Прогнозирование роста нагрузки на библиотеку.</li>
+                            <li>Анализ факторов, влияющих на регистрацию.</li>
+                        </ul>
+                        <button class="download-btn" onclick="openDownloadModal('newUsersChart', 'new_users_statistics')">Скачать диаграмму</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Модальное окно для выбора формата -->
+            <div id="downloadModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeDownloadModal()">&times;</span>
+                    <h3>Выберите формат скачивания</h3>
+                    <p>Выберите, в каком формате вы хотите скачать диаграмму и её описание:</p>
+                    <div class="format-options">
+                        <button onclick="downloadSelectedChart('png')">Скачать как PNG</button>
+                        <button onclick="downloadSelectedChart('pdf')">Скачать как PDF</button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <script src="/static/js/home_script.js"></script>
+    <script src="/static/js/avatar.js"></script>
+
+</body>
+</html>

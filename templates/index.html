@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <header>
+        <h1>Карачаево - Черкесская республиканская детская библиотека имени Сергея Петровича Никулина</h1>
+    </header>
+    <div class="container">
+        <div class="content">
+            <h2>История нашей библиотеки</h2>
+            <p>Она ведёт свою историю с первого упоминания о ней в архивах в 1947 году. Располагалась в здании возле Дома Правительства республики (сейчас это здание не существует). Впоследствии библиотека поменяла несколько адресов: завод Холодильного машиностроения, здание обувной фабрики, детская музыкальная школа. И только в 1980 году переехала в дом 85 по улице Международной, недалеко от Драматического театра, в зеленой части города, где располагается и сейчас..</p>
+        </div>
+        <div class="form-container">
+            <div class="tab-header-container">
+                <div class="tab-header active" onclick="showTab('login')">Вход</div>
+                <div class="tab-header" onclick="showTab('register')">Регистрация</div>
+            </div>
+            <div id="login" class="tab" style="display: block;">
+                <h3>Форма входа</h3>
+                <form action="/login" method="POST">
+                    <label for="login-email">Электронная почта:</label>
+                    <input type="email" id="login-email" name="login-email" placeholder="Введите вашу электронную почту" required>
+                    <label for="login-password">Пароль:</label>
+                    <input type="password" id="login-password" name="login-password" placeholder="Введите ваш пароль" required>
+                    <input type="submit" value="Войти">
+                    <div class="message-container">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">
+                                        {{ message }}
+                                        <span class="close-btn" onclick="this.parentElement.style.display='none';">×</span>
+                                    </div>
+                                {% endfor %}
+                                <script>
+                                    function showTab(tabName) {
+                                    const tabs = document.querySelectorAll('.tab');
+                                    const headers = document.querySelectorAll('.tab-header');
+                                    tabs.forEach(tab => {
+                                        tab.style.display = 'none';
+                                    });
+                                    headers.forEach(header => {
+                                        header.classList.remove('active');
+                                    });
+                                    document.getElementById(tabName).style.display = 'block';
+                                    document.querySelector(`.tab-header[onclick="showTab('${tabName}')"]`).classList.add('active');
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    if(urlParams.get('tab') === 'register') {
+                                        showTab('register');
+                                    } else {
+                                        showTab('login');
+                                    }
+                                }
+
+
+                                </script>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+
+                </form>
+            </div>
+            <div id="register" class="tab">
+                <h3>Форма регистрации</h3>
+                <form action="/register" method="POST">
+                    <label for="register-username">Никнейм:</label>
+                    <input type="text" id="register-username" name="register-username" placeholder="Введите ваш никнейм" required>
+
+                    <label for="register-email">Электронная почта:</label>
+                    <input type="email" id="register-email" name="register-email" placeholder="Введите вашу электронную почту" required>
+
+                    <label for="register-password">Пароль:</label>
+                    <input type="password" id="register-password" name="register-password" placeholder="Введите ваш пароль" required>
+
+                    <label for="register-birthdate">Дата рождения:</label>
+                    <input type="date" id="register-birthdate" name="register-birthdate" required>
+
+                    <input type="submit" value="Зарегистрироваться">
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025. Все права защищены.</p>
+    </footer>
+    <script src="/static/js/index_script.js"></script>
+</body>
+</html>

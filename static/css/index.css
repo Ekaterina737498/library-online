@@ -1,0 +1,229 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+}
+
+header {
+    background-color: #a8d8ea;
+    padding: 20px;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    height: calc(100% - 200px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.content {
+    flex: 1;
+    margin-right: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.form-container {
+    flex: 0 0 300px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tab {
+    display: none;
+}
+
+.tab-header {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #e0f7fa;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.tab-header.active {
+    background-color: #b2ebf2;
+}
+
+.tab-header-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="submit"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus {
+    border-color: #a8d8ea;
+    box-shadow: inset 0 0 5px rgba(168, 216, 234, 0.5);
+}
+
+input[type="submit"] {
+    background-color: #a8d8ea;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #88c9e0;
+}
+
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #a8d8ea;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .content {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .form-container {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 15px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .form-container {
+        padding: 15px;
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="submit"] {
+        padding: 8px;
+    }
+
+    .tab-header {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 5px;
+    }
+
+    .content {
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .form-container {
+        padding: 10px;
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="submit"] {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    .tab-header {
+        padding: 6px 10px;
+        font-size: 12px;
+        margin: 0 2px;
+    }
+
+    footer {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

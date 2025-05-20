@@ -1,0 +1,824 @@
+/* Общие стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Контейнер для всей страницы */
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Обложка книги */
+.book-cover {
+    flex: 0 0 200px;
+    margin-right: 20px;
+}
+
+.book-cover img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Детали книги */
+.book-details {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.book-details h1 {
+    margin: 0 0 10px;
+    font-size: 2em;
+}
+
+/* Информация о книге */
+.book-info {
+    margin-bottom: 20px;
+}
+
+.book-info span {
+    display: block;
+    margin: 5px 0;
+}
+
+/* Контейнер для кнопок */
+.button-container {
+    display: flex;
+    margin-top: 0;
+    gap: 10px;
+}
+
+/* Общий стиль для кнопок */
+button {
+    background-color: #a8d8ea;
+    color: #003366;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #88c9e0;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Кнопка "Читать" */
+.read-button {
+    padding: 10px 25px;
+    font-size: 20px;
+}
+
+/* Кнопка "Избранное" */
+.favorite-button {
+    font-size: 40px;
+    padding: 0;
+    background-color: #f5e4ce;
+}
+
+.favorite-button.active {
+    color: red;
+}
+
+.favorite-button:hover {
+    background-color: #f1cb9a;
+}
+
+/* Кнопка "Лайк" */
+.like-button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.like-button.liked {
+    background-color: #ff4d4d;
+    color: white;
+    border-color: #ff4d4d;
+}
+
+.like-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Кнопка "Ответить" */
+.replies-toggle {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.replies-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+/* Кнопка удаления отзыва */
+.delete-review-button {
+    background: none;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.delete-review-button:hover {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+/* Кнопка формы отзыва */
+.review-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Кнопка формы ответа */
+.reply-form button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Жанры */
+.genres {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.genre {
+    background-color: #e0f7fa;
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 0.9em;
+}
+
+/* Система рейтинга (звезды) */
+.stars {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #ccc;
+}
+
+.star.selected {
+    color: #ffd700;
+}
+
+/* Форма для добавления отзыва */
+.review-form {
+    margin: 20px 0;
+}
+
+.review-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 0.9em;
+}
+
+/* Стили для отзывов */
+.review {
+    display: flex;
+    align-items: flex-start;
+    margin: 20px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-direction: column;
+}
+
+.review:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.review-header .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid #e0f7fa;
+    transition: transform 0.3s;
+}
+
+.review-header .avatar:hover {
+    transform: scale(1.1);
+}
+
+.review-header .username {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #003366;
+    margin-right: 10px;
+}
+
+.review-header .date {
+    color: #6c757d;
+    font-size: 0.9em;
+    margin-left: auto;
+}
+
+.review-content {
+    flex: 1;
+}
+
+.review-content p {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1em;
+    color: #444;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #a8d8ea;
+}
+
+.review-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Уведомления */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 255, 0, 0.9);
+    color: black;
+    padding: 15px 25px;
+    border-radius: 8px;
+    z-index: 1000;
+    font-size: 0.9em;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Стили для формы редактирования */
+#editForm {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+
+#editForm label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+#editForm input,
+#editForm textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+#editForm textarea {
+    height: 100px;
+}
+
+#editForm button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editForm button:first-of-type {
+    background-color: #28a745;
+    color: white;
+    margin-right: 10px;
+}
+
+#editForm button:last-of-type {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Стили для модального окна подтверждения удаления */
+#deleteConfirmation, #deleteReviewConfirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content button:first-of-type {
+    background-color: #dc3545;
+    color: white;
+}
+
+.modal-content button:last-of-type {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Дочерние отзывы */
+.parent-review {
+    background-color: #f9f9f9;
+}
+
+.child-reviews {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    background-color: #fff;
+}
+
+.child-review {
+    margin-left: 40px;
+    margin-right: 20px;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.reply-form {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+}
+
+.reply-form-inner {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.reply-input {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        flex-direction: column;
+        padding: 12px;
+    }
+
+    .book-cover {
+        flex: none;
+        margin: 0 auto 12px;
+        text-align: center;
+    }
+
+    .book-cover img {
+        max-width: 180px;
+        height: auto;
+    }
+
+    .book-details {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .book-details h1 {
+        font-size: 1.4em;
+    }
+
+    .book-info {
+        margin-bottom: 12px;
+    }
+
+    .book-info span {
+        font-size: 0.85em;
+    }
+
+    .button-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+        margin-right: 5px;
+        max-width: 140px;
+    }
+
+    .read-button {
+        padding: 8px 20px;
+        font-size: 16px;
+        max-width: 160px;
+    }
+
+    .favorite-button {
+        font-size: 28px;
+        padding: 0;
+        max-width: 50px;
+    }
+
+    .like-button, .replies-toggle, .delete-review-button {
+        padding: 4px 8px;
+        font-size: 12px;
+        max-width: 80px;
+    }
+
+    .review-form button {
+        padding: 8px 16px;
+        font-size: 14px;
+        max-width: 140px;
+    }
+
+    .reply-form button {
+        padding: 4px 8px;
+        font-size: 12px;
+        max-width: 80px;
+    }
+
+    .genres {
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .genre {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        margin: 3px;
+    }
+
+    .stars {
+        justify-content: center;
+    }
+
+    .star {
+        font-size: 1.2em;
+    }
+
+    .review-form {
+        margin: 12px 0;
+    }
+
+    .review-form textarea {
+        height: 70px;
+        font-size: 0.85em;
+        padding: 6px;
+    }
+
+    .review {
+        margin: 12px 0;
+        padding: 12px;
+    }
+
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .review-header .avatar {
+        width: 36px;
+        height: 36px;
+        margin-right: 8px;
+    }
+
+    .review-header .username {
+        font-size: 0.95em;
+    }
+
+    .review-header .date {
+        font-size: 0.8em;
+        margin-left: 0;
+    }
+
+    .review-content p {
+        font-size: 0.9em;
+        padding: 6px;
+    }
+
+    .review-actions {
+        flex-direction: row;
+        gap: 4px;
+        margin-top: 8px;
+    }
+
+    .child-reviews {
+        margin-left: -12px;
+        margin-right: -12px;
+        width: calc(100% + 24px);
+    }
+
+    .child-review {
+        margin-left: 20px;
+        margin-right: 12px;
+        padding: 8px;
+    }
+
+    .reply-form {
+        margin-left: -12px;
+        margin-right: -12px;
+        width: calc(100% + 24px);
+        padding: 8px 12px;
+    }
+
+    .reply-form-inner {
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    .reply-input {
+        height: 50px;
+        font-size: 0.85em;
+        padding: 4px;
+    }
+
+    .toast-notification {
+        bottom: 12px;
+        right: 12px;
+        padding: 10px 16px;
+        font-size: 0.85em;
+    }
+
+    .modal-content {
+        padding: 12px;
+        max-width: 90%;
+    }
+
+    .modal-content h2 {
+        font-size: 1.1em;
+        margin-bottom: 12px;
+    }
+
+    .modal-content button {
+        padding: 8px 16px;
+        font-size: 14px;
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 6px;
+    }
+
+    .container {
+        padding: 8px;
+        box-shadow: none;
+    }
+
+    .book-cover img {
+        max-width: 120px;
+    }
+
+    .book-details h1 {
+        font-size: 1.2em;
+    }
+
+    .book-info span {
+        font-size: 0.8em;
+    }
+
+    .button-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 12px;
+        max-width: 120px;
+        margin-right: 0;
+    }
+
+    .read-button {
+        padding: 6px 16px;
+        font-size: 14px;
+        max-width: 140px;
+    }
+
+    .favorite-button {
+        font-size: 24px;
+        max-width: 40px;
+    }
+
+    .like-button, .replies-toggle, .delete-review-button {
+        padding: 3px 6px;
+        font-size: 11px;
+        max-width: 70px;
+    }
+
+    .review-form button {
+        padding: 6px 12px;
+        font-size: 12px;
+        max-width: 120px;
+    }
+
+    .reply-form button {
+        padding: 3px 6px;
+        font-size: 11px;
+        max-width: 70px;
+    }
+
+    .genres {
+        gap: 3px;
+    }
+
+    .genre {
+        padding: 4px 8px;
+        font-size: 0.75em;
+    }
+
+    .star {
+        font-size: 1em;
+    }
+
+    .review-form {
+        margin: 8px 0;
+    }
+
+    .review-form textarea {
+        height: 60px;
+        font-size: 0.8em;
+        padding: 5px;
+    }
+
+    .review {
+        margin: 8px 0;
+        padding: 8px;
+    }
+
+    .review-header .avatar {
+        width: 28px;
+        height: 28px;
+    }
+
+    .review-header .username {
+        font-size: 0.85em;
+    }
+
+    .review-header .date {
+        font-size: 0.75em;
+    }
+
+    .review-content p {
+        font-size: 0.85em;
+        padding: 5px;
+    }
+
+    .review-actions {
+        gap: 3px;
+    }
+
+    .child-reviews {
+        margin-left: -8px;
+        margin-right: -8px;
+        width: calc(100% + 16px);
+    }
+
+    .child-review {
+        margin-left: 12px;
+        margin-right: 8px;
+        padding: 6px;
+    }
+
+    .reply-form {
+        margin-left: -8px;
+        margin-right: -8px;
+        width: calc(100% + 16px);
+        padding: 6px 8px;
+    }
+
+    .reply-form-inner {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .reply-input {
+        height: 40px;
+        font-size: 0.8em;
+        padding: 3px;
+    }
+
+    .toast-notification {
+        bottom: 8px;
+        right: 8px;
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+
+    .modal-content {
+        padding: 8px;
+    }
+
+    .modal-content h2 {
+        font-size: 1em;
+    }
+
+    .modal-content button {
+        padding: 6px 12px;
+        font-size: 12px;
+        max-width: 100px;
+    }
+}
+

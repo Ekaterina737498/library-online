@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали книги</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book_ditel.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="book-cover">
+            <img src="{{ book.cover_image }}" alt="Обложка книги">
+        </div>
+        <div class="book-details" data-isbn="{{ book.isbn }}">
+            <h1>{{ book.title }}</h1>
+            <div class="stars" id="ratingStars">
+                <span class="star" onclick="setRating(1)">★</span>
+                <span class="star" onclick="setRating(2)">★</span>
+                <span class="star" onclick="setRating(3)">★</span>
+                <span class="star" onclick="setRating(4)">★</span>
+                <span class="star" onclick="setRating(5)">★</span>
+            </div>
+            <span id="ratingCount">
+                Рейтинг: {{ "%.1f"|format(book.rating) if book.rating else "Нет оценок" }}
+                ({{ book.rating_count }} оценок)
+            </span>
+            <div class="book-info">
+                <span><strong>Автор:</strong> {{ book.authors }}</span>
+                <span><strong>Год публикации:</strong> {{ book.publication_year }}</span>
+                <span><strong>Издатель:</strong> {{ book.publisher }}</span>
+                <span><strong>Возрастной рейтинг:</strong> {{ book.age_rating }}</span>
+                <span><strong>Количество страниц:</strong> {{ book.total_pages }}</span>
+                <span><strong>ISBN:</strong> {{ book.isbn }}</span>
+                <span><strong>Описание:</strong> {{ book.description }}</span>
+            </div>
+            <div class="button-container">
+                {% set book_rating_num = (book.age_rating | replace('+', '') | replace(' лет', '') | replace(' ', '') | int(default=0)) %}
+                {% set allowed_rating_num = (book.allowed_rating | replace('+', '') | replace(' лет', '') | replace(' ', '') | int(default=0)) %}
+                {% if book.file_available and book_rating_num <= allowed_rating_num %}
+                    <button class="read-button" data-age-rating="{{ book_rating_num }}" data-allowed-rating="{{ allowed_rating_num }}"
+                            onclick="handleReadButtonClick('{{ book.isbn }}', '{{ url_for('static', filename=book.file_path) }}')">
+                        Читать
+                    </button>
+                {% else %}
+                    <button class="read-button" disabled data-age-rating="{{ book_rating_num }}" data-allowed-rating="{{ allowed_rating_num }}"
+                            title="{{ 'Маленький ещё, чтоб такое читать' if book_rating_num > allowed_rating_num else 'Файл недоступен' }}">
+                        Читать
+                    </button>
+                {% endif %}
+                <button class="favorite-button {{ 'active' if book.is_favorite }}" onclick="toggleFavorite('{{ book.isbn }}')">
+                    {{ '❤️' if book.is_favorite else '🖤' }}
+                </button>
+                {% if session.user_role == 2 %}
+                    <button class="edit-button" onclick="showEditForm()">Редактировать</button>
+                    <button class="delete-button" onclick="showDeleteConfirmation()">Удалить</button>
+                {% endif %}
+            </div>
+        </div>
+        {% if session.user_role == 2 %}
+        <div id="editForm" style="display: none;">
+            <h2>Редактировать книгу</h2>
+            <form id="editBookForm">
+                <label>Название:</label>
+                <input type="text" name="title" value="{{ book.title }}" required>
+                <label>Обложка (URL):</label>
+                <input type="text" name="cover_image_url" value="{{ book.cover_image }}">
+                <label>Автор (Фамилия):</label>
+                <input type="text" name="author_last_name" value="{{ book.authors.split(', ')[0].split(' ')[-1] }}" required>
+                <label>Автор (Имя):</label>
+                <input type="text" name="author_first_name" value="{{ book.authors.split(', ')[0].split(' ')[0] }}" required>
+                <label>Автор (Отчество):</label>
+                <input type="text" name="author_middle_name" value="{{ book.authors.split(', ')[0].split(' ')[1] if book.authors.split(', ')[0].split(' ')[1:]|length > 1 else '' }}">
+                <label>Год публикации:</label>
+                <input type="number" name="publication_year" value="{{ book.publication_year }}" required>
+                <label>Издатель:</label>
+                <input type="text" name="publisher" value="{{ book.publisher.split(', ')[0] }}" required>
+                <label>Возрастной рейтинг:</label>
+                <input type="text" name="age_rating" value="{{ book.age_rating }}" required>
+                <label>Количество страниц:</label>
+                <input type="number" name="total_pages" value="{{ book.total_pages }}" required>
+                <label>ISBN:</label>
+                <input type="text" name="isbn" value="{{ book.isbn }}" readonly>
+                <label>Описание:</label>
+                <textarea name="description">{{ book.description }}</textarea>
+                <label>Жанры:</label>
+                <input type="text" name="genres" value="{{ book.genres }}" required>
+                <label>Путь к файлу:</label>
+                <input type="text" name="file_path" value="{{ book.file_path }}" required>
+                <button type="button" onclick="saveBookChanges()">Сохранить</button>
+                <button type="button" onclick="cancelEdit()">Отменить</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    {% if session.user_role == 2 %}
+    <div id="deleteConfirmation" style="display: none;">
+        <div class="modal-content">
+            <h2>Подтверждение удаления</h2>
+            <p>Вы уверены, что хотите удалить книгу "{{ book.title }}"?</p>
+            <button onclick="deleteBook()">Удалить</button>
+            <button onclick="cancelDelete()">Отменить</button>
+        </div>
+    </div>
+    {% endif %}
+    <div class="genres">
+        {% for genre in book.genres.split(', ') %}
+            <span class="genre">{{ genre }}</span>
+        {% endfor %}
+    </div>
+    <div class="review-form">
+        <h2>Добавить отзыв</h2>
+        {% if session.user_email %}
+            <textarea id="reviewInput" placeholder="Напишите ваш отзыв..."></textarea>
+            <button onclick="addReview()">Отправить отзыв</button>
+        {% else %}
+            <p>Войдите, чтобы оставить отзыв.</p>
+        {% endif %}
+    </div>
+    <div id="reviewsContainer">
+        {% for review in book.reviews %}
+            <div class="review parent-review" id="review{{ review.review_id }}" data-email="{{ review.email }}" data-isbn="{{ book.isbn }}">
+                <div class="review-header">
+                    <img src="{{ review.avatar_url }}" alt="Avatar" class="avatar">
+                    <span class="username">{{ review.username }}</span>
+                    <span class="date">{{ review.created_date | datetimeformat }}</span>
+                    <div class="review-actions">
+                        <button class="like-button {{ 'liked' if review.is_liked }}"
+                                onclick="toggleLike('{{ review.review_id }}')"
+                                data-review-id="{{ review.review_id }}">
+                            👍 {{ review.like_count }}
+                        </button>
+                        <button class="replies-toggle"
+                                onclick="toggleReplies('{{ review.review_id }}')"
+                                data-review-id="{{ review.review_id }}">
+                            Отзывы ({{ review.reply_count }})
+                        </button>
+                        {% if session.user_email == review.email or session.user_role == 3 %}
+                            <button class="delete-review-button"
+                                    onclick="deleteReview('{{ review.review_id }}', '{{ book.isbn }}')">
+                                Удалить
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="review-content">
+                    <p>{{ review.content }}</p>
+                </div>
+                {% if session.user_email %}
+                    <div class="reply-form" style="display: none;">
+                        <textarea class="reply-input" placeholder="Напишите ваш ответ..."></textarea>
+                        <button onclick="addReply('{{ review.review_id }}', '{{ book.isbn }}')">Отправить</button>
+                    </div>
+                {% endif %}
+                <div class="child-reviews" id="replies{{ review.review_id }}" style="display: none;">
+                    {% for child in book.child_reviews if child.parent_review_id == review.review_id %}
+                        <div class="review child-review" id="review{{ child.review_id }}"
+                             data-email="{{ child.email }}" data-isbn="{{ book.isbn }}">
+                            <div class="review-header">
+                                <img src="{{ child.avatar_url }}" alt="Avatar" class="avatar">
+                                <span class="username">{{ child.username }}</span>
+                                <span class="date">{{ child.created_date | datetimeformat }}</span>
+                                <div class="review-actions">
+                                    <button class="like-button {{ 'liked' if child.is_liked }}"
+                                            onclick="toggleLike('{{ child.review_id }}')"
+                                            data-review-id="{{ child.review_id }}">
+                                        👍 {{ child.like_count }}
+                                    </button>
+                                    {% if session.user_email == child.email or session.user_role == 3 %}
+                                        <button class="delete-review-button"
+                                                onclick="deleteReview('{{ child.review_id }}', '{{ book.isbn }}')">
+                                            Удалить
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>{{ child.content }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="{{ url_for('static', filename='js/book_ditel_script.js') }}" defer></script>
+</body>
+</html>
