@@ -1010,6 +1010,20 @@ canvas {
     border-color: #e3d3f0;
 }
 
+.cancel-btn {
+    flex: 1;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.cancel-btn:hover {
+    background-color: #bbb;
+}
+
 /* Стили для устройств с шириной 1024px и меньше (мобильная компоновка) */
 @media (max-width: 1024px) {
     .container {
