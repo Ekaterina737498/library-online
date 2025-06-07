@@ -321,32 +321,74 @@ function previewAvatar(event) {
     }
 }
 
-
-
 function toggleEdit() {
     try {
         const form = document.getElementById('profile-form');
         if (!form) return;
 
         const saveBtn = form.querySelector('.save-btn');
+        const cancelBtn = form.querySelector('.cancel-btn');
         const editBtn = document.getElementById('edit-btn');
+        const logoutBtn = form.querySelector('.logout-btn');
+        const inputs = form.querySelectorAll('input:not([type="file"])');
+        const isEditing = !saveBtn.hidden;
 
-        // Переключение режима редактирования
-        const inputs = form.querySelectorAll('input[readonly]');
-        inputs.forEach(input => {
-            input.readOnly = !input.readOnly;
-            input.style.border = input.readOnly ? 'none' : '2px solid #6b8dd6';
-        });
-
-        // Обновление кнопок
-        saveBtn.hidden = !saveBtn.hidden;
-        editBtn.hidden = saveBtn.hidden;
-
-        // Добавляем обработчик отправки формы
-        form.onsubmit = submitProfile;
+        if (!isEditing) {
+            // Вход в режим редактирования
+            inputs.forEach(input => {
+                input.readOnly = false;
+                input.disabled = false;
+                input.style.border = '2px solid #6b8dd6';
+            });
+            saveBtn.hidden = false;
+            cancelBtn.hidden = false;
+            cancelBtn.textContent = 'Отмена'; // Устанавливаем начальный текст
+            editBtn.hidden = true;
+            logoutBtn.hidden = true; // Скрываем кнопку "Выйти"
+        } else {
+            // Выход из режима редактирования
+            inputs.forEach(input => {
+                input.readOnly = true;
+                input.disabled = true;
+                input.style.border = 'none';
+            });
+            saveBtn.hidden = true;
+            cancelBtn.hidden = true;
+            editBtn.hidden = false;
+            logoutBtn.hidden = false; // Показываем кнопку "Выйти"
+        }
     } catch (error) {
         console.error('Ошибка редактирования:', error);
         showToast('Ошибка редактирования профиля', 'error');
+    }
+}
+
+// Функция для кнопки "Отмена"
+function cancelEdit() {
+    try {
+        const form = document.getElementById('profile-form');
+        const saveBtn = form.querySelector('.save-btn');
+        const cancelBtn = form.querySelector('.cancel-btn');
+        const editBtn = document.getElementById('edit-btn');
+        const logoutBtn = form.querySelector('.logout-btn');
+        const inputs = form.querySelectorAll('input:not([type="file"])');
+        const isCancelActive = cancelBtn.textContent === 'Отмена';
+
+
+         inputs.forEach(input => {
+             input.readOnly = true;
+             input.disabled = true;
+             input.style.border = 'none';
+         });
+         saveBtn.hidden = true;
+         cancelBtn.hidden = true;
+         editBtn.hidden = false;
+         logoutBtn.hidden = false; // Показываем кнопку "Выйти"
+         showToast('Редактирование отменено', 'info');
+
+    } catch (error) {
+        console.error('Ошибка отмены:', error);
+        showToast('Ошибка при отмене изменений', 'error');
     }
 }
 
@@ -457,18 +499,16 @@ function refreshRating() {
 // отправка профиля
 async function submitProfile(e) {
     e.preventDefault();
-    const activeTab = document.querySelector('.tab-header.active').getAttribute('onclick').replace("showTab('", "").replace("')", ""); // Получаем активную вкладку
-
+    const activeTab = document.querySelector('.tab-header.active').getAttribute('onclick').replace("showTab('", "").replace("')", "");
     const form = document.getElementById('profile-form');
     const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-    // Удаляем аватар из данных если не выбран новый файл
     if (!document.getElementById('avatarInput').files.length) {
-        formData.delete('avatar'); // Убираем поле если файл не выбран
-        formData.append('keep_avatar', 'true'); // Добавляем флаг для сервера
+        formData.delete('avatar');
+        formData.append('keep_avatar', 'true');
     }
 
-    const submitBtn = form.querySelector('button[type="submit"]');
     try {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Сохранение...';
@@ -483,12 +523,9 @@ async function submitProfile(e) {
 
         const result = await response.json();
         if (result.success) {
-            // Обновление данных на странице
-            updateUI(result); // Обновляем интерфейс
-            updateProfile(); // Обновляем рейтинг
-            toggleEdit(); // Возврат в режим просмотра
-            document.querySelector('.save-btn').style.display = 'none'; // Скрытие кнопки "Сохранить"
-            showTab(activeTab); // Возврат на текущую вкладку
+            updateUI(result);
+            toggleEdit(); // Выходим из режима редактирования
+            showTab(activeTab);
             showToast('Изменения сохранены!', 'success');
         } else {
             throw new Error(result.error || 'Неизвестная ошибка');
@@ -501,6 +538,19 @@ async function submitProfile(e) {
         submitBtn.textContent = 'Сохранить';
     }
 }
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('profile-form');
+    if (form) {
+        const inputs = form.querySelectorAll('input:not([type="file"])');
+        inputs.forEach(input => {
+            input.readOnly = true;
+            input.disabled = true;
+            input.style.border = 'none';
+        });
+    }
+});
 
 // Вспомогательная функция уведомлений
 function showToast(message, type = 'info') {
