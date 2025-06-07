@@ -1,7 +1,7 @@
 /* Общие стили для страницы */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f9fc;
+    background-color: #e1dff2;
     color: #333;
     margin: 0;
     padding: 20px;
@@ -62,7 +62,7 @@ body {
 
 /* Общий стиль для кнопок */
 button {
-    background-color: #a8d8ea;
+    background-color: #f2d2ee;
     color: #003366;
     padding: 10px 20px;
     border: none;
@@ -74,7 +74,7 @@ button {
 }
 
 button:hover {
-    background-color: #88c9e0;
+    background-color: #e3d3f0;
     transform: scale(1.05);
 }
 
@@ -93,7 +93,7 @@ button:disabled {
 .favorite-button {
     font-size: 40px;
     padding: 0;
-    background-color: #f5e4ce;
+    background-color: #ffe4e3;
 }
 
 .favorite-button.active {
@@ -101,7 +101,7 @@ button:disabled {
 }
 
 .favorite-button:hover {
-    background-color: #f1cb9a;
+    background-color: #f2d2ee;
 }
 
 /* Кнопка "Лайк" */
@@ -184,11 +184,12 @@ button:disabled {
 }
 
 .genre {
-    background-color: #e0f7fa;
+    background-color: #b996d6;
     border-radius: 20px;
     padding: 10px 15px;
     margin: 5px;
     font-size: 0.9em;
+    color: white;
 }
 
 /* Система рейтинга (звезды) */
@@ -256,7 +257,7 @@ button:disabled {
     border-radius: 50%;
     object-fit: cover;
     margin-right: 12px;
-    border: 2px solid #e0f7fa;
+    border: 2px solid #e3d3f0;
     transition: transform 0.3s;
 }
 
@@ -289,7 +290,7 @@ button:disabled {
     background-color: rgba(255, 255, 255, 0.5);
     padding: 10px;
     border-radius: 8px;
-    border-left: 3px solid #a8d8ea;
+    border-left: 3px solid #f2d2ee;
 }
 
 .review-actions {
@@ -324,7 +325,7 @@ button:disabled {
     padding: 20px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
-    background-color: #f8f9fa;
+    background-color: #e1dff2;
 }
 
 #editForm label {
@@ -821,4 +822,3 @@ button:disabled {
         max-width: 100px;
     }
 }
-

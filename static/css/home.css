@@ -3,7 +3,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f7f9fc;
+    background-color: #e1dff2;
     color: #333;
     box-sizing: border-box;
 }
@@ -44,7 +44,7 @@ html, body {
 }
 
 .header-user {
-    background-color: #a8d8ea;
+    background-color: #f2d2ee;
     padding: 10px;
     border-radius: 5px;
     display: flex;
@@ -77,6 +77,7 @@ html, body {
 .nickname {
     font-size: 16px;
     color: #333;
+    cursor: default;
 }
 
 .tab-header-container {
@@ -88,7 +89,7 @@ html, body {
 .tab-header {
     cursor: pointer;
     padding: 10px 15px;
-    background-color: #e0f7fa;
+    background-color: #e3d3f0;
     border-radius: 5px;
     margin: 5px 0;
     transition: background-color 0.3s;
@@ -96,7 +97,7 @@ html, body {
 }
 
 .tab-header.active {
-    background-color: #b2ebf2;
+    background-color: #ffe4e3;
 }
 
 .tab-header span {
@@ -174,13 +175,13 @@ html, body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #e0f7fa;
+    background-color: #e3d3f0;
     margin-right: 10px;
     transition: background-color 0.3s;
 }
 
 .genre:hover {
-    background-color: #b2ebf2;
+    background-color: #ffe4e3;
 }
 
 input[type="text"] {
@@ -193,8 +194,8 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #a8d8ea;
-    box-shadow: inset 0 0 5px rgba(168, 216, 234, 0.5);
+    border-color: #f2d2ee;
+    box-shadow: inset 0 0 5px rgba(242, 210, 238, 0.5);
 }
 
 .search-container {
@@ -206,7 +207,7 @@ input[type="text"]:focus {
 .search-container button {
     padding: 10px;
     border: none;
-    background-color: #a8d8ea;
+    background-color: #f2d2ee;
     color: white;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
@@ -215,7 +216,7 @@ input[type="text"]:focus {
 }
 
 .search-container button:hover {
-    background-color: #88c9e0;
+    background-color: #e3d3f0;
 }
 
 .book-shelf {
@@ -223,7 +224,7 @@ input[type="text"]:focus {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f0f0f0;
+    background-color: #e1dff2;
     display: flex;
     overflow-x: auto;
     flex-direction: column;
@@ -231,7 +232,7 @@ input[type="text"]:focus {
 
 #profile.tab {
     padding: 30px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #e1dff2 0%, #ffe4e3 100%);
     border-radius: 15px;
     animation: fadeIn 0.5s ease;
 }
@@ -260,11 +261,10 @@ input[type="text"]:focus {
     justify-content: center;
     margin-top: 15px;
     padding: 10px 25px;
-    background: #74b9ff;
+    background: #cdb9de;
     color: white;
     border: none;
     border-radius: 25px;
-    cursor: pointer;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -307,8 +307,8 @@ input[type="text"]:focus {
 }
 
 .form-group input:focus {
-    border-color: #74b9ff;
-    box-shadow: 0 0 8px rgba(116, 185, 255, 0.2);
+    border-color: #e3d3f0;
+    box-shadow: 0 0 8px rgba(227, 211, 240, 0.2);
     outline: none;
 }
 
@@ -316,7 +316,7 @@ input[type="text"]:focus {
     display: inline-flex;
     align-items: center;
     padding: 8px 15px;
-    background: #ffeaa7;
+    background: #ffffff;
     border-radius: 20px;
     font-weight: 600;
     color: #2d3436;
@@ -366,7 +366,7 @@ input[type="text"]:focus {
 }
 
 input[readonly] {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     cursor: default;
     opacity: 0.8;
 }
@@ -403,13 +403,13 @@ input:not([readonly]) {
 }
 
 .avatar.loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, #e1dff2 25%, #ffe4e3 50%, #e1dff2 75%);
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
 }
 
 .edit-btn {
-    background: linear-gradient(135deg, #6b8dd6 0%, #8e44ad 100%);
+    background: linear-gradient(135deg, #e3d3f0 0%, #ffe4e3 100%);
     color: white;
     padding: 8px 20px;
     border: none;
@@ -439,14 +439,14 @@ input:not([readonly]) {
 }
 
 #edit-btn {
-    background: linear-gradient(135deg, #6b8dd6 0%, #8e44ad 100%);
+    background: linear-gradient(135deg, #bf9eda 0% 0%, #ffb9b7 100%);
     color: white !important;
     padding: 10px 25px;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(107, 141, 214, 0.25);
+    box-shadow: 0 4px 15px rgba(227, 211, 240, 0.25);
     font-weight: 600;
     letter-spacing: 0.5px;
     display: flex;
@@ -456,13 +456,13 @@ input:not([readonly]) {
 
 #edit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(107, 141, 214, 0.35);
-    background: linear-gradient(135deg, #7d9de0 0%, #9b59b6 100%);
+    box-shadow: 0 6px 20px rgba(227, 211, 240, 0.35);
+    background: linear-gradient(135deg, #ffb9b7 0%, #bf9eda 100%);
 }
 
 #edit-btn:active {
     transform: translateY(0);
-    box-shadow: 0 3px 10px rgba(107, 141, 214, 0.25);
+    box-shadow: 0 3px 10px rgba(227, 211, 240, 0.25);
 }
 
 #edit-btn::before {
@@ -472,7 +472,7 @@ input:not([readonly]) {
 }
 
 @keyframes highlightUpdate {
-    0% { background: rgba(107, 141, 214, 0.1); }
+    0% { background: rgba(227, 211, 240, 0.1); }
     100% { background: transparent; }
 }
 
@@ -541,7 +541,7 @@ input:not([readonly]) {
 }
 
 .shelf::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #e1dff2;
 }
 
 .shelf::-webkit-scrollbar-thumb {
@@ -558,7 +558,7 @@ input:not([readonly]) {
 
 .slider-btn {
     padding: 5px 15px;
-    background: #6b8dd6;
+    background: #c19ae0;
     color: white;
     border: none;
     border-radius: 4px;
@@ -721,7 +721,7 @@ input:not([readonly]) {
 
 .genre {
     padding: 8px 15px;
-    background: #6b8dd6;
+    background: #b89ad0;
     color: white;
     border-radius: 15px;
     cursor: pointer;
@@ -759,7 +759,7 @@ input:not([readonly]) {
 }
 
 #add-book-form {
-    background: #f9f9f9;
+    background: #e1dff2;
     padding: 20px;
     border-radius: 8px;
     max-width: 600px;
@@ -820,7 +820,7 @@ input:not([readonly]) {
 
 #book-form .save-btn,
 #add-book-btn {
-    background: #6b8dd6;
+    background: #c3a8d9;
     color: white;
 }
 
@@ -831,7 +831,8 @@ input:not([readonly]) {
 
 #book-form .save-btn:hover,
 #add-book-btn:hover {
-    background: #5a78c0;
+    background: #e1dff1;
+    color: #7f6593;
 }
 
 #book-form .cancel-btn:hover {
@@ -852,7 +853,7 @@ input:not([readonly]) {
 .statistics-section {
     margin: 20px 0;
     padding: 15px;
-    background-color: #f9f9f9;
+    background-color: #e1dff2;
     border-radius: 8px;
 }
 
@@ -911,7 +912,7 @@ canvas {
 
 .format-options button {
     padding: 10px 20px;
-    background-color: #6b8dd6;
+    background-color: #e3d3f0;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -921,7 +922,7 @@ canvas {
 }
 
 .format-options button:hover {
-    background-color: #5a7cc2;
+    background-color: #ffe4e3;
 }
 
 .chart-container {
@@ -966,7 +967,7 @@ canvas {
 .download-btn {
     display: inline-block;
     padding: 8px 16px;
-    background-color: #6b8dd6;
+    background-color: #e3d3f0;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -976,7 +977,7 @@ canvas {
 }
 
 .download-btn:hover {
-    background-color: #5a7cc2;
+    background-color: #ffe4e3;
 }
 
 .download-btn:disabled {
@@ -1006,7 +1007,7 @@ canvas {
 
 .filter-section select:focus {
     outline: none;
-    border-color: #6b8dd6;
+    border-color: #e3d3f0;
 }
 
 /* Стили для устройств с шириной 1024px и меньше (мобильная компоновка) */
@@ -1025,7 +1026,7 @@ canvas {
         position: sticky;
         top: 0;
         z-index: 1000;
-        background-color: #a8d8ea;
+        background-color: #f2d2ee;
         transition: height 0.3s ease;
     }
 
@@ -1062,7 +1063,7 @@ canvas {
     }
 
     .sidebar.collapsed .header-user {
-        background-color: #88c9e0;
+        background-color: #e3d3f0;
         padding: 6px;
         margin: 0;
         flex-direction: column;
@@ -1071,7 +1072,7 @@ canvas {
         flex-shrink: 0;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: 30%;
+        width: 25%;
         transition: transform 0.2s;
     }
 
@@ -1111,14 +1112,14 @@ canvas {
         flex-direction: column;
         align-items: center;
         border-radius: 4px;
-        background-color: #e0f7fa;
+        background-color: #e3d3f0;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, background-color 0.3s;
     }
 
     .sidebar.collapsed .tab-header:hover {
         transform: translateY(-2px);
-        background-color: #b2ebf2;
+        background-color: #ffe4e3;
     }
 
     .sidebar.collapsed .tab-header span {
@@ -1145,7 +1146,7 @@ canvas {
     }
 
     .sidebar:not(.collapsed) .header-user {
-        background-color: #88c9e0;
+        background-color: #e3d3f0;
         padding: 6px;
         margin: 0;
         flex-direction: column;
@@ -1192,14 +1193,14 @@ canvas {
         flex-direction: column;
         align-items: center;
         border-radius: 4px;
-        background-color: #e0f7fa;
+        background-color: #e3d3f0;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, background-color 0.3s;
     }
 
     .sidebar:not(.collapsed) .tab-header:hover {
         transform: translateY(-2px);
-        background-color: #b2ebf2;
+        background-color: #ffe4e3;
     }
 
     .sidebar:not(.collapsed) .tab-header span {
@@ -1301,7 +1302,7 @@ canvas {
         flex-wrap: nowrap;
         padding-bottom: 6px;
         scrollbar-width: thin;
-        scrollbar-color: #888 #f1f1f1;
+        scrollbar-color: #888 #e1dff2;
     }
 
     .genre-container::-webkit-scrollbar {
@@ -1861,7 +1862,7 @@ canvas {
 /* Прокрутка */
 .shelf, .tab-header-container, .genre-container {
     scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
+    scrollbar-color: #888 #e1dff2;
 }
 
 .shelf::-webkit-scrollbar,
@@ -1873,7 +1874,7 @@ canvas {
 .shelf::-webkit-scrollbar-track,
 .tab-header-container::-webkit-scrollbar-track,
 .genre-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #e1dff2;
 }
 
 .shelf::-webkit-scrollbar-thumb,
@@ -1882,4 +1883,3 @@ canvas {
     background: #888;
     border-radius: 3px;
 }
-
